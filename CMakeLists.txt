@@ -3,4 +3,6 @@ project(data_structures C)
 
 set(CMAKE_C_STANDARD 23)
 
-add_executable(data_structures vector.c)
+add_executable(vector vector.c)
+add_executable(linked_list linked_list.c)
+
