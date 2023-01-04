@@ -5,28 +5,28 @@
 typedef struct {
     int size;
     int capacity;
-    int *data;
+    int* data;
 } Vector;
 
 // Vector function prototypes
-int size(Vector *vector);
-int capacity(Vector *vector);
-int is_empty(Vector *vector);
-int at(Vector *vector, int index);
-void push(Vector *vector, int item);
-void insert(Vector *vector, int index, int item);
-void prepend(Vector *vector, int item);
-int pop(Vector *vector);
-void delete(Vector *vector, int index);
-void remove_item(Vector *vector, int item);
-int find(Vector *vector, int item);
-void resize(Vector *vector, int new_capacity);
-void print_vector(Vector *vector);
+int size(Vector* vector);
+int capacity(Vector* vector);
+int is_empty(Vector* vector);
+int at(Vector* vector, int index);
+void push(Vector* vector, int item);
+void insert(Vector* vector, int index, int item);
+void prepend(Vector* vector, int item);
+int pop(Vector* vector);
+void delete(Vector* vector, int index);
+void remove_item(Vector* vector, int item);
+int find(Vector* vector, int item);
+void resize(Vector* vector, int new_capacity);
+void print_vector(Vector* vector);
 
 // Testing vector implementation
-int main(){
+int main() {
     // Create vector
-    Vector *vector = malloc(sizeof(Vector));
+    Vector* vector = malloc(sizeof(Vector));
 
     // Initialize vector
     vector->size = 0;
@@ -56,7 +56,7 @@ int main(){
     print_vector(vector);
 
     printf("### Delete at index 2 ###\n");
-    delete(vector, 1);
+    delete (vector, 1);
     print_vector(vector);
 
     printf("### Remove item 3 ###\n");
@@ -75,110 +75,111 @@ int main(){
     print_vector(vector);
 
     // Free vector
+    free(vector->data);
     free(vector);
 
     return 0;
 }
 
 // Vector function definitions
-int size(Vector *vector){
+int size(Vector* vector) {
     return vector->size;
 }
 
-int capacity(Vector *vector){
+int capacity(Vector* vector) {
     return vector->capacity;
 }
 
-int is_empty(Vector *vector){
+int is_empty(Vector* vector) {
     return vector->size == 0;
 }
 
-int at(Vector *vector, int index){
-    if(index >= vector->size){
+int at(Vector* vector, int index) {
+    if (index >= vector->size) {
         printf("Index out of bounds");
         return -1;
     }
     return vector->data[index];
 }
 
-void push(Vector *vector, int item){
-    if(vector->size == vector->capacity){
+void push(Vector* vector, int item) {
+    if (vector->size == vector->capacity) {
         resize(vector, vector->capacity * 2);
     }
     vector->data[vector->size] = item;
     vector->size++;
 }
 
-void insert(Vector *vector, int index, int item){
-    if(index >= vector->size){
+void insert(Vector* vector, int index, int item) {
+    if (index >= vector->size) {
         printf("Index out of bounds");
         return;
     }
-    if(vector->size == vector->capacity){
+    if (vector->size == vector->capacity) {
         resize(vector, vector->capacity * 2);
     }
     // Shift items to the right
-    for(int i = vector->size; i > index; i--){
+    for (int i = vector->size; i > index; i--) {
         vector->data[i] = vector->data[i - 1];
     }
     vector->data[index] = item;
     vector->size++;
 }
 
-void prepend(Vector *vector, int item){
+void prepend(Vector* vector, int item) {
     insert(vector, 0, item);
 }
 
-int pop(Vector *vector){
-    if(vector->size == 0){
+int pop(Vector* vector) {
+    if (vector->size == 0) {
         printf("Vector is empty");
         return -1;
     }
     int item = vector->data[vector->size - 1];
     vector->size--;
     // Resize to half if size is 1/4 of capacity
-    if(vector->size == vector->capacity / 4){
+    if (vector->size == vector->capacity / 4) {
         resize(vector, vector->capacity / 2);
     }
     return item;
 }
 
-void delete(Vector *vector, int index){
-    if(index >= vector->size){
+void delete(Vector* vector, int index) {
+    if (index >= vector->size) {
         printf("Index out of bounds");
         return;
     }
     // Shift items to the left
-    for(int i = index; i < vector->size - 1; i++){
+    for (int i = index; i < vector->size - 1; i++) {
         vector->data[i] = vector->data[i + 1];
     }
     vector->size--;
-    if(vector->size == vector->capacity / 4){
+    if (vector->size == vector->capacity / 4) {
         resize(vector, vector->capacity / 2);
     }
 }
 
-void remove_item(Vector *vector, int item){
-    for(int i = 0; i < vector->size; i++){
-        if(vector->data[i] == item){
-            delete(vector, i);
+void remove_item(Vector* vector, int item) {
+    for (int i = 0; i < vector->size; i++) {
+        if (vector->data[i] == item) {
+            delete (vector, i);
             i--;
         }
     }
 }
 
-int find(Vector *vector, int item){
-    for(int i = 0; i < vector->size; i++){
-        if(vector->data[i] == item){
+int find(Vector* vector, int item) {
+    for (int i = 0; i < vector->size; i++) {
+        if (vector->data[i] == item) {
             return i;
         }
     }
     return -1;
 }
 
-void resize(Vector *vector, int new_capacity){
-    int *new_data = (int *)malloc(new_capacity * sizeof(int));
-    for(int i = 0; i < vector->size; i++){
+void resize(Vector* vector, int new_capacity) {
+    int* new_data = (int*)malloc(new_capacity * sizeof(int));
+    for (int i = 0; i < vector->size; i++) {
         new_data[i] = vector->data[i];
     }
     free(vector->data);
@@ -186,13 +187,13 @@ void resize(Vector *vector, int new_capacity){
     vector->capacity = new_capacity;
 }
 
-void print_vector(Vector *vector){
+void print_vector(Vector* vector) {
     printf("Size: %d\n", vector->size);
     printf("Capacity: %d\n", vector->capacity);
     printf("Data: [");
-    for(int i = 0; i < vector->size; i++){
+    for (int i = 0; i < vector->size; i++) {
         printf("%d", vector->data[i]);
-        if(i != vector->size - 1){
+        if (i != vector->size - 1) {
             printf(", ");
         }
     }
