@@ -24,6 +24,13 @@
         v2 = ROTL(v2, 32); \
     } while (0)
 
+// Node data structure
+typedef struct Node {
+    const char* key;
+    int value;
+    struct Node* next;
+} Node;
+
 // The hash map data structure.
 typedef struct HashMap {
     // The number of elements in the hash map.
@@ -31,11 +38,7 @@ typedef struct HashMap {
     // The capacity of the hash map.
     size_t capacity;
     // The array of linked lists used to store the key-value pairs.
-    struct Node {
-        const char* key;
-        int value;
-        struct Node* next;
-    }** buckets;
+    Node** buckets;
 } HashMap;
 
 void hash_map_init(HashMap* map, size_t capacity);
@@ -155,20 +158,20 @@ void hash_map_insert(HashMap* map, const char* key, int value) {
     // Calculate the hash of the key.
     uint32_t hash = hash_siphash(key) % map->capacity;
     // Check if the key is already in the map. If it is, update its value.
-    struct Node** pnode = &map->buckets[hash];
-    while (*pnode) {
-        if (strcmp((*pnode)->key, key) == 0) {
-            (*pnode)->value = value;
+    struct Node* node = map->buckets[hash];
+    while (node) {
+        if (strcmp(node->key, key) == 0) {
+            node->value = value;
             return;
         }
-        pnode = &(*pnode)->next;
+        node = node->next;
     }
-    // Insert the new key-value pair.
-    struct Node* node = malloc(sizeof(struct Node));
+    // The key is not in the map, so insert it.
+    node = malloc(sizeof(struct Node));
     node->key = key;
     node->value = value;
-    node->next = NULL;
-    *pnode = node;
+    node->next = map->buckets[hash];
+    map->buckets[hash] = node;
     map->size++;
 }
 
