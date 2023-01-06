@@ -42,7 +42,7 @@ int main() {
     return 0;
 }
 
-void enqueue(Queue* queue, int data) {
+inline void enqueue(Queue* queue, int data) {
     if (full(queue)) {
         printf("Queue is full\n");
         return;
